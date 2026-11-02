@@ -15,16 +15,17 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 100vw;
+  width: calc(100vw + 2px);
   background: var(--bordeaux);
 }
 
+/* 2px de recouvrement avec la carte : sans lui, la mise à l'échelle laisse un fin trait clair à la jonction */
 .categorie--gauche::before {
-  right: 100%;
+  right: calc(100% - 2px);
 }
 
 .categorie--droite::before {
-  left: 100%;
+  left: calc(100% - 2px);
 }
 
 /* produit à gauche : la carte part du bord gauche de l'écran */

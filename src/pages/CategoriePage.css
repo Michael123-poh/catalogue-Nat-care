@@ -33,8 +33,6 @@
    par la page, qui tient sur un écran. */
 .detail__carrousel {
   display: grid;
-  width: 430px;
-  margin: 0 auto;
   overflow-x: clip;
   touch-action: none;
 }
@@ -274,6 +272,10 @@
   top: calc(760px - 289px * var(--p));
   left: 0;
   right: 0;
+  /* le carrousel couvre toute la largeur de l'écran (le produit glisse jusqu'au bord) ; les infos
+     restent dans la largeur de la maquette, centrées */
+  max-width: 430px;
+  margin: 0 auto;
   padding: 0 16px;
   opacity: var(--p);
   text-align: center;

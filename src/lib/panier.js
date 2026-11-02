@@ -7,7 +7,12 @@ export const NUMERO_COMMANDE = '237693613437'
 const CLE = 'natcare-commande'
 const produits = categories.flatMap((c) => c.produits)
 
-export const formaterPrix = (prix) => `${prix} FCFA`
+// Espace insécable (code 160) : elle ne se coupe jamais en fin de ligne
+const ESPACE_INSECABLE = String.fromCharCode(160)
+
+// Milliers séparés : 10500 devient « 10 500 FCFA »
+export const formaterPrix = (prix) =>
+  `${String(prix).replace(/\B(?=(\d{3})+(?!\d))/g, ESPACE_INSECABLE)}${ESPACE_INSECABLE}FCFA`
 
 // Le panier ne garde que { id, quantite } : les images et les prix sont relus depuis le catalogue
 function lire() {
