@@ -1,0 +1,143 @@
+/* Tutoriel : fond assombri avec un trou sur l'élément visé, une bulle, et un doigt animé pour les gestes.
+   Rien ne bloque la page : seule la bulle capte les touches. */
+.tuto {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  animation: tuto-entre 0.35s ease both;
+}
+
+.tuto__trou {
+  position: absolute;
+  border-radius: 16px;
+  box-shadow: 0 0 0 200vmax rgba(40, 8, 14, 0.62);
+}
+
+/* Anneau qui pulse autour de l'élément à toucher */
+.tuto__onde {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: inherit;
+  animation: tuto-onde 1.6s ease-out infinite;
+}
+
+/* Doigt qui montre le geste */
+.tuto__doigt {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.28), 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.tuto__doigt--horizontal {
+  animation: tuto-doigt-horizontal 1.9s ease-in-out infinite;
+}
+
+.tuto__doigt--vertical {
+  animation: tuto-doigt-vertical 1.9s ease-in-out infinite;
+}
+
+.tuto__bulle {
+  position: absolute;
+  padding: 16px 18px 12px;
+  border-radius: 18px;
+  background: var(--creme);
+  color: var(--bordeaux);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+}
+
+.tuto__fleche {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: var(--creme);
+  transform: rotate(45deg);
+}
+
+.tuto__fleche--haut {
+  top: -7px;
+}
+
+.tuto__fleche--bas {
+  bottom: -7px;
+}
+
+.tuto__texte {
+  margin: 0 0 12px;
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.tuto__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tuto__ok {
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #a9b96e;
+  color: var(--blanc);
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.tuto__passer {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--bordeaux);
+  font-family: var(--font-texte);
+  font-size: 12px;
+  text-decoration: underline;
+  opacity: 0.65;
+  cursor: pointer;
+}
+
+@keyframes tuto-entre {
+  from { opacity: 0; }
+}
+
+@keyframes tuto-onde {
+  0% { transform: scale(1); opacity: 0.95; }
+  100% { transform: scale(1.14); opacity: 0; }
+}
+
+@keyframes tuto-doigt-horizontal {
+  0% { transform: translateX(90px) scale(1.1); opacity: 0; }
+  15% { transform: translateX(90px) scale(0.9); opacity: 1; }
+  70% { transform: translateX(-90px) scale(0.9); opacity: 1; }
+  100% { transform: translateX(-90px) scale(1.1); opacity: 0; }
+}
+
+@keyframes tuto-doigt-vertical {
+  0% { transform: translateY(70px) scale(1.1); opacity: 0; }
+  15% { transform: translateY(70px) scale(0.9); opacity: 1; }
+  70% { transform: translateY(-70px) scale(0.9); opacity: 1; }
+  100% { transform: translateY(-70px) scale(1.1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tuto,
+  .tuto__onde,
+  .tuto__doigt {
+    animation: none;
+  }
+}

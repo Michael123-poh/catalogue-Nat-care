@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { prixDe } from '../data/categories'
 import { formaterPrix, lienCommande, panier, usePanier } from '../lib/panier'
+import { tutoriel } from '../lib/tutoriel'
 import './PanierMenu.css'
 
 /** Menu du burger : les produits sur lesquels on a cliqué « Acheter », et le bouton Commander. */
@@ -13,6 +14,11 @@ export default function PanierMenu({ ouvert, onFermer }) {
     window.addEventListener('keydown', surTouche)
     return () => window.removeEventListener('keydown', surTouche)
   }, [ouvert, onFermer])
+
+  const revoirTutoriel = () => {
+    tutoriel.reinitialiser()
+    onFermer()
+  }
 
   return (
     <div className={`panier${ouvert ? ' panier--ouvert' : ''}`} aria-hidden={!ouvert}>
@@ -88,6 +94,10 @@ export default function PanierMenu({ ouvert, onFermer }) {
             </div>
           </>
         )}
+
+        <button type="button" className="panier__tuto" onClick={revoirTutoriel}>
+          Revoir le tutoriel
+        </button>
       </aside>
     </div>
   )

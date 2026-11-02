@@ -78,6 +78,13 @@ function CategorieDetail({ categorie }) {
     }
   }, [aller])
 
+  // Le tutoriel peut demander la vue compacte (étape « glisse vers le haut »)
+  useEffect(() => {
+    const compacter = () => setCompact(true)
+    window.addEventListener('natcare:compacter', compacter)
+    return () => window.removeEventListener('natcare:compacter', compacter)
+  }, [])
+
   // Balayage horizontal (doigt ou souris). On suit le pointeur sur la fenêtre pour que le geste
   // soit pris en compte même si le doigt sort de la zone avant d'être relevé.
   const commencerBalayage = (e) => {
@@ -114,7 +121,11 @@ function CategorieDetail({ categorie }) {
       >
         <h1 className="detail__bandeau">{titre}</h1>
 
-        <div className="detail__carrousel" onPointerDown={commencerBalayage}>
+        <div
+          className="detail__carrousel"
+          data-produits={nbProduits}
+          onPointerDown={commencerBalayage}
+        >
           {vue.sortant !== null && (
             <ProduitPanneau
               key={produits[vue.sortant].id}

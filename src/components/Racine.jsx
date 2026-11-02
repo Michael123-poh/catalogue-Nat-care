@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
+import Tutoriel from './Tutoriel'
 
 // Mise en page commune : l'en-tête reste en place d'une page à l'autre, seul le contenu change
 export default function Racine() {
@@ -9,6 +10,7 @@ export default function Racine() {
       <div className="racine__contenu">
         <Outlet />
       </div>
+      <Tutoriel />
     </>
   )
 }
