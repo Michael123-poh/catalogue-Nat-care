@@ -1,10 +1,18 @@
-/* Maquette mobile : on garde une colonne de 430px max, centrée sur grand écran */
+/* Maquette mobile : colonne de 430px, centrée, agrandie ou réduite (transform) pour tenir dans la
+   fenêtre. .catalogue occupe la hauteur de la colonne une fois mise à l'échelle. */
 .catalogue {
   position: relative;
-  max-width: 430px;
-  margin: 0 auto;
-  overflow-x: clip;
-  padding-bottom: 60px;
+  overflow: clip;
+}
+
+.catalogue__colonne {
+  /* flow-root : la marge du titre reste dans la colonne et compte dans sa hauteur mesurée */
+  display: flow-root;
+  width: 430px;
+  /* centrée même quand la fenêtre est plus étroite que la colonne */
+  margin-left: calc(50% - 215px);
+  padding-bottom: 24px;
+  transform-origin: top center;
 }
 
 .catalogue__titre {

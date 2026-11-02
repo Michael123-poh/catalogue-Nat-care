@@ -43,7 +43,9 @@ export const DESCRIPTION_PROVISOIRE = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis',
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis',
 ]
-export const PRIX_PROVISOIRE = 3500
+const PRIX_PROVISOIRE = 3500
+
+export const prixDe = (produit) => produit.prix ?? PRIX_PROVISOIRE
 
 const masquePurify = {
   id: 'masque-purify',

@@ -1,4 +1,12 @@
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  height: 54px; /* = HAUTEUR_ENTETE (lib/echelleEcran.js) */
+  /* même nom sur toutes les pages : l'en-tête reste en place pendant la transition, sans fondu */
+  view-transition-name: entete;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11,6 +19,7 @@
 }
 
 .header__menu {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -28,4 +37,22 @@
   width: 100%;
   background: var(--bordeaux);
   border-radius: 2px;
+}
+
+/* Nombre d'articles dans la commande */
+.header__pastille {
+  position: absolute;
+  top: -12px;
+  right: -14px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #a9b96e;
+  color: var(--blanc);
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
 }

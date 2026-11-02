@@ -63,6 +63,11 @@ body {
   min-height: 100svh;
 }
 
+/* Sous l'en-tête fixe (voir Header.css) */
+.racine__contenu {
+  padding-top: 54px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -83,6 +88,17 @@ img {
 ::view-transition-new(root) {
   animation-duration: 1s;
   animation-timing-function: ease-in-out;
+}
+
+/* L'en-tête est identique sur les deux pages : pas de fondu, il reste simplement en place */
+::view-transition-old(entete) {
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-new(entete) {
+  animation: none;
+  opacity: 1;
 }
 
 /* Aller vers la page détail : l'ancienne image est masquée et la nouvelle (qui tourne) reste opaque */

@@ -2,9 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Produit3D from './Produit3D'
 import { chargerModele, modeleEnCache } from '../lib/modele3d'
 import { suivreVol, vol } from '../lib/volProduit'
-import { DESCRIPTION_PROVISOIRE, PRIX_PROVISOIRE } from '../data/categories'
-
-const formaterPrix = (prix) => `${prix} FCFA`
+import { DESCRIPTION_PROVISOIRE, prixDe } from '../data/categories'
+import { formaterPrix, panier } from '../lib/panier'
 
 // Le nom revient à la ligne entre les mots, jamais au milieu : on réduit la taille quand le
 // mot le plus long ne tient pas dans la largeur de l'écran
@@ -63,11 +62,24 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
     if (face >= 0) viseurRef.current?.tournerVers(face)
   }, [actif, modele, images])
 
+  // Acheter : le produit rejoint la commande (menu burger). Le bouton confirme un instant.
+  const [ajoute, setAjoute] = useState(false)
+  useEffect(() => {
+    if (!ajoute) return
+    const minuteur = setTimeout(() => setAjoute(false), 1500)
+    return () => clearTimeout(minuteur)
+  }, [ajoute])
+  const acheter = () => {
+    panier.ajouter(produit.id)
+    setAjoute(true)
+  }
+
   const en3D = modele && !sans3D
   // Photo choisie qui n'est pas une face de la rotation (vue du dessus) : affichée à plat
   const surDessus = en3D && modele.sources.indexOf(images[actif]) < 0
   const classes = ['panneau']
-  if (role !== 'initial') classes.push(`panneau--${role}`, `panneau--${sens > 0 ? 'suivant' : 'precedent'}`)
+  if (role !== 'initial')
+    classes.push(`panneau--${role}`, `panneau--${sens > 0 ? 'suivant' : 'precedent'}`)
   if (compact) classes.push('panneau--compact')
 
   return (
@@ -98,12 +110,7 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
           }}
         >
           {en3D && (
-            <Produit3D
-              modele={modele}
-              nom={nom}
-              viseurRef={viseurRef}
-              onErreur={passerEnPlat}
-            />
+            <Produit3D modele={modele} nom={nom} viseurRef={viseurRef} onErreur={passerEnPlat} />
           )}
           <img
             className={`detail__image${en3D ? ' detail__image--calque' : ''}`}
@@ -111,7 +118,6 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
             alt={nom}
           />
         </div>
-
       </div>
 
       <div className="detail__points" role="tablist">
@@ -139,9 +145,9 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
             <p key={i}>{texte}</p>
           ))}
         </div>
-        <p className="detail__prix">{formaterPrix(produit.prix ?? PRIX_PROVISOIRE)}</p>
-        <button type="button" className="detail__acheter">
-          Acheter
+        <p className="detail__prix">{formaterPrix(prixDe(produit))}</p>
+        <button type="button" className="detail__acheter" onClick={acheter}>
+          {ajoute ? 'Ajouté ✓' : 'Acheter'}
         </button>
       </div>
     </section>

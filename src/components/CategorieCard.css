@@ -8,6 +8,25 @@
   color: var(--blanc);
 }
 
+/* Le bandeau se prolonge jusqu'au bord de l'écran, même quand la page est mise à l'échelle ou que la
+   fenêtre est plus large que la colonne (le surplus est rogné par la page) */
+.categorie::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  background: var(--bordeaux);
+}
+
+.categorie--gauche::before {
+  right: 100%;
+}
+
+.categorie--droite::before {
+  left: 100%;
+}
+
 /* produit à gauche : la carte part du bord gauche de l'écran */
 .categorie--gauche {
   margin-right: auto;
