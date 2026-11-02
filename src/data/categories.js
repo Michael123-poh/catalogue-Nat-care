@@ -36,6 +36,14 @@ import huileRacines12 from '../assets/12Nat_Care_Huile_Racines-removebg-preview.
 // facePrincipale : (optionnel) photo de côté qui sert de base au modèle 3D (contour et face de départ).
 //   À utiliser quand la photo phare est prise en plongée : son contour déformerait le volume
 // hauteurDetail : hauteur de l'image principale sur la page détail (px)
+// description : (optionnel) deux paragraphes affichés en colonnes sous le produit
+// prix : (optionnel) prix en FCFA. Sans valeur, le texte et le prix provisoires ci-dessous s'affichent
+
+export const DESCRIPTION_PROVISOIRE = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis',
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis',
+]
+export const PRIX_PROVISOIRE = 3500
 
 const masquePurify = {
   id: 'masque-purify',

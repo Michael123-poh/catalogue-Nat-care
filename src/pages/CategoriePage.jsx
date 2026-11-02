@@ -30,6 +30,9 @@ function CategorieDetail({ categorie }) {
   const minuteur = useRef(0)
   const depart = useRef(null)
 
+  // Vue compacte : balayage vers le haut. Les miniatures passent sous le produit et les infos remontent.
+  const [compact, setCompact] = useState(false)
+
   // Le vol depuis la home ne concerne que le premier produit, affiché à l'arrivée
   const [volInitial] = useState(() => vol.enCours)
 
@@ -52,20 +55,28 @@ function CategorieDetail({ categorie }) {
 
   useEffect(() => () => clearTimeout(minuteur.current), [])
 
-  // Flèches du clavier (ordinateur)
+  // Clavier et molette (ordinateur)
   useEffect(() => {
     const surTouche = (e) => {
       if (e.key === 'ArrowRight') aller(1)
       if (e.key === 'ArrowLeft') aller(-1)
+      if (e.key === 'ArrowDown') setCompact(true)
+      if (e.key === 'ArrowUp') setCompact(false)
+    }
+    const surMolette = (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) setCompact(e.deltaY > 0)
     }
     window.addEventListener('keydown', surTouche)
-    return () => window.removeEventListener('keydown', surTouche)
+    window.addEventListener('wheel', surMolette, { passive: true })
+    return () => {
+      window.removeEventListener('keydown', surTouche)
+      window.removeEventListener('wheel', surMolette)
+    }
   }, [aller])
 
   // Balayage horizontal (doigt ou souris). On suit le pointeur sur la fenêtre pour que le geste
   // soit pris en compte même si le doigt sort de la zone avant d'être relevé.
   const commencerBalayage = (e) => {
-    if (nbProduits < 2) return
     depart.current = { x: e.clientX, y: e.clientY }
     const terminer = (fin) => {
       window.removeEventListener('pointerup', surRelache)
@@ -77,6 +88,8 @@ function CategorieDetail({ categorie }) {
       const dy = fin.clientY - debut.y
       if (Math.abs(dx) > SEUIL_BALAYAGE && Math.abs(dx) > 1.5 * Math.abs(dy)) {
         aller(dx < 0 ? 1 : -1)
+      } else if (Math.abs(dy) > SEUIL_BALAYAGE && Math.abs(dy) > 1.5 * Math.abs(dx)) {
+        setCompact(dy < 0)
       }
     }
     const surRelache = (ev) => terminer(ev)
@@ -99,6 +112,7 @@ function CategorieDetail({ categorie }) {
             role="sortant"
             sens={vue.sens}
             estPhare={vue.sortant === 0}
+            compact={compact}
           />
         )}
         <ProduitPanneau
@@ -108,6 +122,7 @@ function CategorieDetail({ categorie }) {
           sens={vue.sens}
           estPhare={vue.courant === 0}
           avecVol={volInitial && vue.sens === 0}
+          compact={compact}
         />
       </div>
     </div>

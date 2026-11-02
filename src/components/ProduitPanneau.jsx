@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Produit3D from './Produit3D'
 import { chargerModele, modeleEnCache } from '../lib/modele3d'
 import { suivreVol, vol } from '../lib/volProduit'
+import { DESCRIPTION_PROVISOIRE, PRIX_PROVISOIRE } from '../data/categories'
+
+const formaterPrix = (prix) => `${prix} FCFA`
 
 // Le nom revient à la ligne entre les mots, jamais au milieu : on réduit la taille quand le
 // mot le plus long ne tient pas dans la largeur de l'écran
@@ -19,8 +22,9 @@ function styleNom(nom) {
  * role : 'initial' (affiché à l'arrivée), 'entrant' / 'sortant' (pendant un balayage)
  * estPhare : c'est le produit de la carte de la home, celui qui voyage (et revient) avec la transition
  * avecVol : on arrive depuis la home, le produit tourne pendant son déplacement
+ * compact : vue réduite (balayage vers le haut) : miniatures sous le produit, infos remontées
  */
-export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol }) {
+export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol, compact }) {
   const { nom, images, hauteurDetail } = produit
 
   // On démarre sur la face de départ du modèle : le produit phare de la home, ou sa photo de
@@ -64,6 +68,7 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol 
   const surDessus = en3D && modele.sources.indexOf(images[actif]) < 0
   const classes = ['panneau']
   if (role !== 'initial') classes.push(`panneau--${role}`, `panneau--${sens > 0 ? 'suivant' : 'precedent'}`)
+  if (compact) classes.push('panneau--compact')
 
   return (
     <section className={classes.join(' ')} aria-hidden={role === 'sortant'} aria-label={nom}>
@@ -87,7 +92,7 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol 
         <div
           className={`detail__produit${surDessus ? ' detail__produit--dessus' : ''}`}
           style={{
-            height: hauteurDetail,
+            '--h': hauteurDetail,
             // Seul le produit de la carte de la home voyage avec la transition de page
             viewTransitionName: estPhare && role !== 'sortant' ? 'produit-phare' : undefined,
           }}
@@ -126,6 +131,19 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol 
       <h2 className="detail__nom" style={styleNom(nom)}>
         {nom}
       </h2>
+
+      {/* Sous le nom : on fait défiler la page vers le haut pour découvrir les infos */}
+      <div className="detail__infos">
+        <div className="detail__description">
+          {(produit.description ?? DESCRIPTION_PROVISOIRE).map((texte, i) => (
+            <p key={i}>{texte}</p>
+          ))}
+        </div>
+        <p className="detail__prix">{formaterPrix(produit.prix ?? PRIX_PROVISOIRE)}</p>
+        <button type="button" className="detail__acheter">
+          Acheter
+        </button>
+      </div>
     </section>
   )
 }
