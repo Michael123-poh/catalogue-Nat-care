@@ -1,0 +1,215 @@
+/* Même colonne mobile que la home */
+.detail {
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: clip;
+  padding-bottom: 60px;
+}
+
+.detail__bandeau {
+  margin: 54px 0 0;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bordeaux);
+  color: var(--blanc);
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: 0.01em;
+}
+
+/* Carrousel de produits : les panneaux occupent la même case. Au balayage, seul le produit glisse
+   (le sortant part dans le sens du geste, le suivant arrive de l'autre côté). Les textes (noms,
+   miniatures, points) ne bougent pas : ils se remplacent par un court fondu.
+   touch-action laisse le défilement vertical au navigateur et nous réserve le balayage horizontal. */
+.detail__carrousel {
+  display: grid;
+  overflow-x: clip;
+  touch-action: pan-y;
+}
+
+.panneau {
+  grid-area: 1 / 1;
+}
+
+.panneau--sortant {
+  pointer-events: none;
+}
+
+/* Produit : glisse sur toute la largeur de la colonne */
+.panneau--sortant.panneau--suivant .detail__scene {
+  animation: produit-sort-gauche 0.55s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.panneau--entrant.panneau--suivant .detail__scene {
+  animation: produit-entre-droite 0.55s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.panneau--sortant.panneau--precedent .detail__scene {
+  animation: produit-sort-droite 0.55s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.panneau--entrant.panneau--precedent .detail__scene {
+  animation: produit-entre-gauche 0.55s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes produit-sort-gauche {
+  to { transform: translateX(-100%); }
+}
+
+@keyframes produit-sort-droite {
+  to { transform: translateX(100%); }
+}
+
+@keyframes produit-entre-droite {
+  from { transform: translateX(100%); }
+}
+
+@keyframes produit-entre-gauche {
+  from { transform: translateX(-100%); }
+}
+
+/* Textes : l'ancien disparaît, le nouveau prend sa place */
+.panneau--sortant .detail__miniatures,
+.panneau--sortant .detail__points,
+.panneau--sortant .detail__nom {
+  animation: texte-sort 0.2s ease both;
+}
+
+.panneau--entrant .detail__miniatures,
+.panneau--entrant .detail__points,
+.panneau--entrant .detail__nom {
+  animation: texte-entre 0.25s ease 0.15s both;
+}
+
+@keyframes texte-sort {
+  to { opacity: 0; }
+}
+
+@keyframes texte-entre {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panneau .detail__scene,
+  .panneau .detail__miniatures,
+  .panneau .detail__points,
+  .panneau .detail__nom {
+    animation: none !important;
+  }
+}
+
+.detail__miniatures {
+  display: flex;
+  justify-content: center;
+  gap: 19px;
+  margin: 76px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detail__miniature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  height: 82px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: #ecefe1;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.detail__miniature--active {
+  border-color: rgba(67, 16, 27, 0.35);
+}
+
+.detail__miniature img {
+  height: 66px;
+  width: auto;
+}
+
+/* Hauteur fixe : la scène ne bouge pas quand on change de vue */
+.detail__scene {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 320px;
+  margin-top: 48px;
+}
+
+
+/* Cadre du produit : même emprise pour la photo à plat et pour le rendu 3D */
+.detail__produit {
+  position: relative;
+  display: flex;
+}
+
+.detail__image,
+.detail__canvas {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+
+.detail__canvas {
+  transition: opacity 0.35s ease;
+}
+
+/* Photo à plat posée sur le rendu 3D : invisible, sauf pour la vue du dessus */
+.detail__image--calque {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.detail__produit--dessus .detail__image--calque {
+  opacity: 1;
+}
+
+.detail__produit--dessus .detail__canvas {
+  opacity: 0;
+}
+
+.detail__points {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 22px;
+}
+
+.detail__point {
+  width: 9px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: #ddd9d4;
+  cursor: pointer;
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.detail__point--actif {
+  width: 30px;
+  background: #cbc6c0;
+}
+
+.detail__nom {
+  max-width: 260px;
+  margin: 52px auto 0;
+  text-align: center;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 0.95;
+  text-transform: uppercase;
+}

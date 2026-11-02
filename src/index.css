@@ -1,0 +1,105 @@
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./assets/fonts/BricolageGrotesque-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./assets/fonts/BricolageGrotesque-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./assets/fonts/BricolageGrotesque-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./assets/fonts/BricolageGrotesque-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galyon';
+  src: url('./assets/fonts/Galyon-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galyon';
+  src: url('./assets/fonts/Galyon-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --creme: #fbf9f4;
+  --bordeaux: #43101b;
+  --blanc: #ffffff;
+
+  --font-titre: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-texte: 'Galyon', 'Bricolage Grotesque', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--creme);
+  color: var(--bordeaux);
+  font-family: var(--font-texte);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+}
+
+/* Transition entre la home et la page détail : le produit phare glisse d'une position à l'autre */
+::view-transition-group(produit-phare) {
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Fond : fondu long et progressif pour que l'ancienne page s'efface en douceur */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+/* Aller vers la page détail : l'ancienne image est masquée et la nouvelle (qui tourne) reste opaque */
+html.vol-produit::view-transition-old(produit-phare) {
+  animation: none;
+  opacity: 0;
+}
+
+html.vol-produit::view-transition-new(produit-phare) {
+  animation: none;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+}

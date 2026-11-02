@@ -1,0 +1,84 @@
+.categorie {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 110px;
+  width: 86%;
+  background: var(--bordeaux);
+  color: var(--blanc);
+}
+
+/* produit à gauche : la carte part du bord gauche de l'écran */
+.categorie--gauche {
+  margin-right: auto;
+  justify-content: flex-end;
+  padding-right: 24px;
+  border-radius: 0 10px 38px 0;
+}
+
+/* produit à droite : la carte part du bord droit de l'écran */
+.categorie--droite {
+  margin-left: auto;
+  justify-content: flex-start;
+  padding-left: 22px;
+  border-radius: 10px 0 0 38px;
+}
+
+.categorie__image {
+  position: absolute;
+  bottom: var(--img-bas);
+  height: var(--img-h);
+  width: auto;
+  max-width: none;
+  pointer-events: none;
+}
+
+.categorie--gauche .categorie__image {
+  left: 10px;
+}
+
+.categorie--droite .categorie__image {
+  right: 8px;
+}
+
+.categorie__texte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.categorie__titre {
+  margin: 0;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.categorie__lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-texte);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.categorie__fleche {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease;
+}
+
+.categorie--gauche:hover .categorie__fleche {
+  transform: translateX(4px);
+}
+
+.categorie--droite:hover .categorie__fleche {
+  transform: translateX(-4px);
+}

@@ -1,0 +1,25 @@
+/* Maquette mobile : on garde une colonne de 430px max, centrée sur grand écran */
+.catalogue {
+  position: relative;
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: clip;
+  padding-bottom: 60px;
+}
+
+.catalogue__titre {
+  margin: 28px 0 0;
+  text-align: center;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.catalogue__liste {
+  display: flex;
+  flex-direction: column;
+  gap: 79px;
+  margin-top: 118px;
+}
