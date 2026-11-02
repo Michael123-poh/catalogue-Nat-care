@@ -1,9 +1,15 @@
 /* Même colonne mobile que la home */
+/* .detail occupe la hauteur de la colonne une fois mise à l'échelle ; la colonne, elle, garde sa
+   hauteur de maquette et est agrandie/réduite par transform (voir CategorieDetail). Sa largeur est
+   celle de la fenêtre divisée par l'échelle : en-tête et bandeau vont de bord à bord. */
 .detail {
-  max-width: 430px;
-  margin: 0 auto;
-  overflow-x: clip;
+  overflow: clip;
+}
+
+.detail__colonne {
+  width: 100%;
   padding-bottom: 24px;
+  transform-origin: top left;
 }
 
 .detail__bandeau {
@@ -27,6 +33,8 @@
    par la page, qui tient sur un écran. */
 .detail__carrousel {
   display: grid;
+  width: 430px;
+  margin: 0 auto;
   overflow-x: clip;
   touch-action: none;
 }

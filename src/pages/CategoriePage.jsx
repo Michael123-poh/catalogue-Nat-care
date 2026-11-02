@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import ProduitPanneau from '../components/ProduitPanneau'
@@ -9,6 +9,11 @@ import './CategoriePage.css'
 // Doit correspondre à la durée de l'animation de glissement dans CategoriePage.css
 const DUREE_GLISSE = 550
 const SEUIL_BALAYAGE = 50
+// Largeur de la maquette mobile. La colonne est agrandie ou réduite pour que la page tienne
+// entièrement dans la fenêtre, sans défilement, quelle que soit la taille de l'écran
+const LARGEUR_MAQUETTE = 430
+const ECHELLE_MIN = 0.4
+const ECHELLE_MAX = 1.6
 
 export default function CategoriePage() {
   const { categorieId } = useParams()
@@ -29,6 +34,29 @@ function CategorieDetail({ categorie }) {
   const enGlissement = useRef(false)
   const minuteur = useRef(0)
   const depart = useRef(null)
+
+  // Échelle de la colonne : on prend la hauteur naturelle de la page (mesurée sans transformation)
+  // et on l'ajuste à la hauteur de la fenêtre. La largeur de la fenêtre limite aussi l'échelle : la colonne ne déborde jamais.
+  const colonne = useRef(null)
+  const [dimensions, setDimensions] = useState({ echelle: 1, hauteur: null, largeur: null })
+  useLayoutEffect(() => {
+    const ajuster = () => {
+      const hauteurNaturelle = colonne.current.offsetHeight
+      const parHauteur = window.innerHeight / hauteurNaturelle
+      const parLargeur = window.innerWidth / LARGEUR_MAQUETTE
+      const echelle = Math.min(ECHELLE_MAX, Math.max(ECHELLE_MIN, Math.min(parHauteur, parLargeur)))
+      // La colonne couvre toute la largeur de la fenêtre (bandeau et en-tête de bord à bord) ;
+      // seul le contenu du produit reste dans la largeur de la maquette
+      setDimensions({
+        echelle,
+        hauteur: hauteurNaturelle * echelle,
+        largeur: window.innerWidth / echelle,
+      })
+    }
+    ajuster()
+    window.addEventListener('resize', ajuster)
+    return () => window.removeEventListener('resize', ajuster)
+  }, [])
 
   // Vue compacte : balayage vers le haut. Les miniatures passent sous le produit et les infos remontent.
   const [compact, setCompact] = useState(false)
@@ -99,31 +127,40 @@ function CategorieDetail({ categorie }) {
   }
 
   return (
-    <div className="detail">
-      <Header />
+    <div className="detail" style={{ height: dimensions.hauteur ?? undefined }}>
+      <div
+        ref={colonne}
+        className="detail__colonne"
+        style={{
+          transform: `scale(${dimensions.echelle})`,
+          width: dimensions.largeur ?? undefined,
+        }}
+      >
+        <Header />
 
-      <h1 className="detail__bandeau">{titre}</h1>
+        <h1 className="detail__bandeau">{titre}</h1>
 
-      <div className="detail__carrousel" onPointerDown={commencerBalayage}>
-        {vue.sortant !== null && (
+        <div className="detail__carrousel" onPointerDown={commencerBalayage}>
+          {vue.sortant !== null && (
+            <ProduitPanneau
+              key={produits[vue.sortant].id}
+              produit={produits[vue.sortant]}
+              role="sortant"
+              sens={vue.sens}
+              estPhare={vue.sortant === 0}
+              compact={compact}
+            />
+          )}
           <ProduitPanneau
-            key={produits[vue.sortant].id}
-            produit={produits[vue.sortant]}
-            role="sortant"
+            key={produits[vue.courant].id}
+            produit={produits[vue.courant]}
+            role={vue.sens === 0 ? 'initial' : 'entrant'}
             sens={vue.sens}
-            estPhare={vue.sortant === 0}
+            estPhare={vue.courant === 0}
+            avecVol={volInitial && vue.sens === 0}
             compact={compact}
           />
-        )}
-        <ProduitPanneau
-          key={produits[vue.courant].id}
-          produit={produits[vue.courant]}
-          role={vue.sens === 0 ? 'initial' : 'entrant'}
-          sens={vue.sens}
-          estPhare={vue.courant === 0}
-          avecVol={volInitial && vue.sens === 0}
-          compact={compact}
-        />
+        </div>
       </div>
     </div>
   )
