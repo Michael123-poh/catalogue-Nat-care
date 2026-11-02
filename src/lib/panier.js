@@ -2,7 +2,7 @@ import { useMemo, useSyncExternalStore } from 'react'
 import { categories, prixDe } from '../data/categories'
 
 // Numéro qui reçoit les commandes (WhatsApp), au format international sans « + »
-export const NUMERO_COMMANDE = '237693613437'
+export const NUMERO_COMMANDE = '237658109284'
 
 const CLE = 'natcare-commande'
 const produits = categories.flatMap((c) => c.produits)

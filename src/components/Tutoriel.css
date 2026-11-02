@@ -23,17 +23,40 @@
   animation: tuto-onde 1.6s ease-out infinite;
 }
 
-/* Doigt qui montre le geste */
+/* Main qui montre le geste. Le point d'ancrage (0 x 0, au centre de l'élément visé) est le bout du
+   doigt ; l'anneau de toucher est centré dessus. */
 .tuto__doigt {
   position: absolute;
   left: 50%;
   top: 50%;
+  width: 0;
+  height: 0;
+}
+
+.tuto__doigt::before {
+  content: '';
+  position: absolute;
+  left: -23px;
+  top: -23px;
   width: 46px;
   height: 46px;
-  margin: -23px 0 0 -23px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.28), 0 4px 14px rgba(0, 0, 0, 0.3);
+  background: rgba(67, 16, 27, 0.3);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+}
+
+.tuto__main {
+  position: absolute;
+  left: -34px;
+  top: -14px;
+  width: 70px;
+  height: 70px;
+  /* bordeaux cerné de blanc : lisible sur le fond assombri comme sur la zone éclairée */
+  fill: var(--bordeaux);
+  stroke: #fff;
+  stroke-width: 1;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
 }
 
 .tuto__doigt--horizontal {
@@ -42,6 +65,10 @@
 
 .tuto__doigt--vertical {
   animation: tuto-doigt-vertical 1.9s ease-in-out infinite;
+}
+
+.tuto__doigt--toucher {
+  animation: tuto-doigt-toucher 1.4s ease-in-out infinite;
 }
 
 .tuto__bulle {
@@ -121,17 +148,23 @@
 }
 
 @keyframes tuto-doigt-horizontal {
-  0% { transform: translateX(90px) scale(1.1); opacity: 0; }
-  15% { transform: translateX(90px) scale(0.9); opacity: 1; }
-  70% { transform: translateX(-90px) scale(0.9); opacity: 1; }
-  100% { transform: translateX(-90px) scale(1.1); opacity: 0; }
+  0% { transform: translateX(90px); opacity: 0; }
+  15% { transform: translateX(90px); opacity: 1; }
+  70% { transform: translateX(-90px); opacity: 1; }
+  100% { transform: translateX(-90px); opacity: 0; }
 }
 
 @keyframes tuto-doigt-vertical {
-  0% { transform: translateY(70px) scale(1.1); opacity: 0; }
-  15% { transform: translateY(70px) scale(0.9); opacity: 1; }
-  70% { transform: translateY(-70px) scale(0.9); opacity: 1; }
-  100% { transform: translateY(-70px) scale(1.1); opacity: 0; }
+  0% { transform: translateY(70px); opacity: 0; }
+  15% { transform: translateY(70px); opacity: 1; }
+  70% { transform: translateY(-70px); opacity: 1; }
+  100% { transform: translateY(-70px); opacity: 0; }
+}
+
+@keyframes tuto-doigt-toucher {
+  0%, 100% { transform: translateY(8px) scale(1); }
+  45% { transform: translateY(0) scale(0.92); }
+  60% { transform: translateY(0) scale(0.92); }
 }
 
 @media (prefers-reduced-motion: reduce) {
