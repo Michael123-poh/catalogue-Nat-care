@@ -483,4 +483,77 @@ export const FICHES = {
       },
     ],
   },
+
+  'lait-corporel': {
+    accroche: 'HYDRATE • NOURRIT • UNIFIE',
+    resume: [
+      'Lait fluide végétal à la niacinamide, au bissap et au karité : hydrate, unifie et sèche tout de suite, sans film collant.',
+      'Après la douche, sur peau encore légèrement humide : le lait disparaît aussitôt, on peut s’habiller dans la seconde.',
+    ],
+    intro: [
+      'Marre d’un lait qui colle sous vos vêtements le matin, ou qui laisse votre peau grise et terne à midi ?',
+      'La plupart des laits du commerce posent deux problèmes : soit ils contiennent des dérivés de pétrole qui bouchent les pores et font transpirer, soit ils s’évaporent au bout de deux heures, laissant les jambes blanchâtres et les coudes rugueux.',
+      'Le Lait Corporel Hydratant Fluide Nat’Care est pensé pour remplacer définitivement votre lait habituel : il apporte une vraie hydratation d’origine végétale qui pénètre instantanément, tout en unifiant le corps jour après jour :',
+    ],
+    sections: [
+      {
+        type: 'bienfaits',
+        items: [
+          {
+            titre: 'Unifie les zones sombres',
+            texte:
+              'La niacinamide associée au bissap réveille l’éclat de la peau et aide à atténuer les disparités de couleur (coudes, genoux, jambes, décolleté).',
+          },
+          {
+            titre: 'Zéro film collant, habillage immédiat',
+            texte:
+              'L’acide hyaluronique et le panthénol désaltèrent les tissus en profondeur, tandis que la poudre d’arrowroot laisse un toucher soyeux et sec. Vous pouvez vous habiller dans la seconde sans tacher vos habits.',
+          },
+          {
+            titre: 'Nutrition durable',
+            texte:
+              'Le beurre de karité et l’huile de sésame locale retiennent l’eau dans l’épiderme pour empêcher le corps de devenir gris ou rêche en cours de journée.',
+          },
+        ],
+      },
+      {
+        type: 'texte',
+        titre: 'Pour qui ?',
+        items: [
+          'Le geste quotidien essentiel pour toutes les peaux. Il convient parfaitement à celles qui recherchent un lait léger, frais et unifiant sous nos climats chauds.',
+        ],
+      },
+      {
+        type: 'etapes',
+        titre: 'Routine et gestuelle recommandée',
+        items: [
+          'Au quotidien : appliquez généreusement après votre douche sur l’ensemble du corps (idéalement sur peau encore légèrement humide). Massez brièvement : le lait disparaît aussitôt.',
+          'Besoin d’un coup d’éclat glamour ? Ajoutez 2 gouttes de notre Huile Sèche Shimmer sur les jambes et le décolleté pour capter la lumière en soirée ou le week-end.',
+          'Peau extrêmement sèche ou zones très rugueuses ? Si vos jambes tiraillent encore ou ont tendance à craqueler avec le vent ou la climatisation, scellez votre lait en appliquant une touche de notre Huile Sèche par-dessus : elle verrouille l’hydratation et nourrit intensément sans graisser vos tissus.',
+        ],
+      },
+    ],
+  },
+
+  'gamme-eclat': {
+    accroche: 'GOMMER • HYDRATER • ILLUMINER',
+    resume: [
+      'Le rituel éclat du corps : Gommage Sugar, Lait Corporel Hydratant Fluide et Huile Éclat, du gommage au fini satiné.',
+      'On gomme, on hydrate sur la peau transformée, puis deux gouttes d’huile shimmer pour capter la lumière.',
+    ],
+    intro: [
+      'Trois soins corps Nat’Care à enchaîner : le gommage débarrasse la peau de ses cellules mortes, le lait fluide s’applique juste après sur une peau transformée, et l’huile shimmer scelle l’hydratation en habillant jambes et décolleté d’un fini satiné.',
+    ],
+    sections: [
+      {
+        type: 'etapes',
+        titre: 'Votre rituel avec la gamme',
+        items: [
+          'Gommage Sugar Soufflé Éclat : 1 à 2 fois par semaine, massé sur peau humide, avec un filet d’eau pour créer le lait, puis rincé.',
+          'Lait Corporel Hydratant Fluide : appliqué immédiatement après le gommage sur une peau transformée (et au quotidien après la douche).',
+          'Huile Éclat : 2 gouttes sur les jambes et le décolleté pour capter la lumière en soirée ou le week-end.',
+        ],
+      },
+    ],
+  },
 }

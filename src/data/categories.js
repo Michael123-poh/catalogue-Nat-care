@@ -21,8 +21,11 @@ import huileDouceur18 from '../assets/18Nat_Care_Huile_Douceur-removebg-preview.
 import huileRacines10 from '../assets/10Nat_Care_Huile_Racines-removebg-preview.png'
 import huileRacines11 from '../assets/11Nat_Care_Huile_Racines-removebg-preview.png'
 import huileRacines12 from '../assets/12Nat_Care_Huile_Racines-removebg-preview.png'
+import laitCorporelFace from '../assets/lait-corporel-face.png'
+import laitCorporelDos from '../assets/lait-corporel-dos.png'
 import gammeVisagePng from '../assets/gammes/gamme-visage.png'
 import gammeCorpsPng from '../assets/gammes/gamme-corps.png'
+import gammeEclatPng from '../assets/gammes/gamme-eclat.png'
 
 // ── Catégories (cartes de la home) ──────────────────────────────────────────────────────────────
 // cote : côté où se trouve le produit phare sur la home (la carte déborde de l'autre côté de l'écran)
@@ -120,6 +123,17 @@ const huileRacines = {
   hauteurDetail: 320,
 }
 
+// Face arrière créée à partir de la face avant (même flacon, étiquette arrière dessinée avec les
+// informations du document produit) : seule la face avant existe en photo.
+const laitCorporel = {
+  id: 'lait-corporel',
+  nom: 'Lait Corporel Hydratant Fluide',
+  prix: 9000,
+  image: laitCorporelFace,
+  images: [laitCorporelDos, laitCorporelFace],
+  hauteurDetail: 320,
+}
+
 // ── Gammes (catégorie « Complet ») ──────────────────────────────────────────────────────────────
 // L'image est une composition des produits côte à côte (voir assets/gammes). Prix provisoires : somme
 // des produits, à remplacer par le prix réel de la gamme.
@@ -145,6 +159,17 @@ const gammeCorps = {
   hauteurDetail: 285,
 }
 
+const gammeEclat = {
+  id: 'gamme-eclat',
+  nom: 'Gamme Éclat',
+  gamme: true,
+  contenu: [gommageSugar, laitCorporel, huileEclat],
+  prix: 21500,
+  image: gammeEclatPng,
+  images: [gammeEclatPng],
+  hauteurDetail: 285,
+}
+
 export const categories = [
   {
     id: 'visage',
@@ -160,7 +185,7 @@ export const categories = [
     cote: 'droite',
     hauteur: 146,
     bas: 16,
-    produits: [gommageSugar, chantilly, huileEclat],
+    produits: [gommageSugar, chantilly, huileEclat, laitCorporel],
   },
   {
     id: 'cheveux',
@@ -176,6 +201,6 @@ export const categories = [
     cote: 'droite',
     hauteur: 112,
     bas: 6,
-    produits: [gammeVisage, gammeCorps],
+    produits: [gammeVisage, gammeCorps, gammeEclat],
   },
 ]
