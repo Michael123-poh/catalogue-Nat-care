@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Produit3D from './Produit3D'
 import { chargerModele, modeleEnCache } from '../lib/modele3d'
 import { suivreVol, vol } from '../lib/volProduit'
-import { DESCRIPTION_PROVISOIRE, prixDe } from '../data/categories'
+import { prixDe } from '../data/categories'
+import { FICHES } from '../data/fiches'
 import { formaterPrix, panier } from '../lib/panier'
 
 // Le nom revient à la ligne entre les mots, jamais au milieu : on réduit la taille quand le
@@ -12,6 +13,9 @@ const LARGEUR_NOM = 360
 function styleNom(nom) {
   const plusLong = Math.max(...nom.split(' ').map((mot) => mot.length))
   const fontSize = Math.min(TAILLE_NOM, Math.floor(LARGEUR_NOM / (plusLong * 0.7)))
+  // Un nom de plus de 20 caractères tiendrait sur 4 lignes et serait rogné en bas de la page : on
+  // le met un peu plus petit et plus large pour qu'il reste sur 2 ou 3 lignes
+  if (nom.length > 20) return { fontSize: Math.min(fontSize, 36), maxWidth: 380 }
   // La colonne reste étroite (260px, comme la maquette) sauf si un mot est plus large
   return { fontSize, maxWidth: Math.max(260, Math.ceil(plusLong * fontSize * 0.7)) }
 }
@@ -32,13 +36,14 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
 
   // Modèle 3D reconstruit depuis les photos : déjà prêt si la home l'a préparé. Sinon (ou si
   // WebGL est indisponible) on affiche la photo à plat.
-  const [modele, setModele] = useState(() => modeleEnCache(produit))
+  // Une gamme (plusieurs produits côte à côte sur une seule image) n'a pas de modèle 3D.
+  const [modele, setModele] = useState(() => (produit.gamme ? null : modeleEnCache(produit)))
   const [sans3D, setSans3D] = useState(false)
   const viseurRef = useRef(null)
   const passerEnPlat = useCallback(() => setSans3D(true), [])
 
   useEffect(() => {
-    if (modele) return
+    if (modele || produit.gamme) return
     let actuel = true
     chargerModele(produit)
       .then((m) => actuel && setModele(m))
@@ -74,6 +79,11 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
     setAjoute(true)
   }
 
+  const fiche = FICHES[produit.id]
+
+  // Une seule image : ni miniatures ni points
+  const plusieursVues = images.length > 1
+
   const en3D = modele && !sans3D
   // Photo choisie qui n'est pas une face de la rotation (vue du dessus) : affichée à plat
   const surDessus = en3D && modele.sources.indexOf(images[actif]) < 0
@@ -84,21 +94,23 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
 
   return (
     <section className={classes.join(' ')} aria-hidden={role === 'sortant'} aria-label={nom}>
-      <ul className="detail__miniatures">
-        {images.map((src, i) => (
-          <li key={src}>
-            <button
-              type="button"
-              className={`detail__miniature${i === actif ? ' detail__miniature--active' : ''}`}
-              onClick={() => setActif(i)}
-              aria-label={`${nom} — vue ${i + 1}`}
-              aria-pressed={i === actif}
-            >
-              <img src={src} alt="" />
-            </button>
-          </li>
-        ))}
-      </ul>
+      {plusieursVues && (
+        <ul className="detail__miniatures">
+          {images.map((src, i) => (
+            <li key={src}>
+              <button
+                type="button"
+                className={`detail__miniature${i === actif ? ' detail__miniature--active' : ''}`}
+                onClick={() => setActif(i)}
+                aria-label={`${nom} — vue ${i + 1}`}
+                aria-pressed={i === actif}
+              >
+                <img src={src} alt="" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <div className="detail__scene">
         <div
@@ -120,19 +132,21 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
         </div>
       </div>
 
-      <div className="detail__points" role="tablist">
-        {images.map((src, i) => (
-          <button
-            key={src}
-            type="button"
-            role="tab"
-            aria-selected={i === actif}
-            aria-label={`Vue ${i + 1}`}
-            className={`detail__point${i === actif ? ' detail__point--actif' : ''}`}
-            onClick={() => setActif(i)}
-          />
-        ))}
-      </div>
+      {plusieursVues && (
+        <div className="detail__points" role="tablist">
+          {images.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              role="tab"
+              aria-selected={i === actif}
+              aria-label={`Vue ${i + 1}`}
+              className={`detail__point${i === actif ? ' detail__point--actif' : ''}`}
+              onClick={() => setActif(i)}
+            />
+          ))}
+        </div>
+      )}
 
       <h2 className="detail__nom" style={styleNom(nom)}>
         {nom}
@@ -141,7 +155,7 @@ export default function ProduitPanneau({ produit, role, sens, estPhare, avecVol,
       {/* Sous le nom : on fait défiler la page vers le haut pour découvrir les infos */}
       <div className="detail__infos">
         <div className="detail__description">
-          {(produit.description ?? DESCRIPTION_PROVISOIRE).map((texte, i) => (
+          {fiche.resume.map((texte, i) => (
             <p key={i}>{texte}</p>
           ))}
         </div>

@@ -21,6 +21,8 @@ import huileDouceur18 from '../assets/18Nat_Care_Huile_Douceur-removebg-preview.
 import huileRacines10 from '../assets/10Nat_Care_Huile_Racines-removebg-preview.png'
 import huileRacines11 from '../assets/11Nat_Care_Huile_Racines-removebg-preview.png'
 import huileRacines12 from '../assets/12Nat_Care_Huile_Racines-removebg-preview.png'
+import gammeVisagePng from '../assets/gammes/gamme-visage.png'
+import gammeCorpsPng from '../assets/gammes/gamme-corps.png'
 
 // ── Catégories (cartes de la home) ──────────────────────────────────────────────────────────────
 // cote : côté où se trouve le produit phare sur la home (la carte déborde de l'autre côté de l'écran)
@@ -36,20 +38,16 @@ import huileRacines12 from '../assets/12Nat_Care_Huile_Racines-removebg-preview.
 // facePrincipale : (optionnel) photo de côté qui sert de base au modèle 3D (contour et face de départ).
 //   À utiliser quand la photo phare est prise en plongée : son contour déformerait le volume
 // hauteurDetail : hauteur de l'image principale sur la page détail (px)
-// description : (optionnel) deux paragraphes affichés en colonnes sous le produit
-// prix : (optionnel) prix en FCFA. Sans valeur, le texte et le prix provisoires ci-dessous s'affichent
+// gamme : (optionnel) true pour une gamme (plusieurs produits vendus ensemble). Une gamme n'a qu'une
+//   image (les produits côte à côte, sans rotation 3D) et la liste de ses produits dans « contenu »
+// prix : prix en FCFA. Les textes de description sont dans data/fiches.js, indexés par id de produit
 
-export const DESCRIPTION_PROVISOIRE = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis',
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis',
-]
-const PRIX_PROVISOIRE = 3500
-
-export const prixDe = (produit) => produit.prix ?? PRIX_PROVISOIRE
+export const prixDe = (produit) => produit.prix
 
 const masquePurify = {
   id: 'masque-purify',
   nom: 'Masque Purify',
+  prix: 3000,
   image: masquePurify5,
   images: [masquePurify4, masquePurify6, masquePurify5],
   hauteurDetail: 275,
@@ -58,6 +56,7 @@ const masquePurify = {
 const masqueGlow = {
   id: 'masque-glow',
   nom: 'Masque Glow',
+  prix: 3000,
   image: masqueGlow7,
   images: [masqueGlow8, masqueGlow9, masqueGlow7],
   hauteurDetail: 275,
@@ -66,6 +65,7 @@ const masqueGlow = {
 const serumGlow = {
   id: 'serum-glow',
   nom: 'Sérum Glow',
+  prix: 7500,
   image: serumGlow2,
   images: [serumGlow3, serumGlow2],
   hauteurDetail: 320,
@@ -74,6 +74,7 @@ const serumGlow = {
 const gommageSugar = {
   id: 'gommage-sugar',
   nom: 'Gommage Sugar Soufflé Éclat',
+  prix: 6500,
   image: gommageSugar21,
   images: [gommageSugar19, gommageSugar20, gommageSugar21],
   dessus: gommageSugar20,
@@ -84,6 +85,7 @@ const gommageSugar = {
 const chantilly = {
   id: 'chantilly-nourrissante',
   nom: 'Chantilly Nourrissante',
+  prix: 8000,
   image: chantilly24,
   images: [chantilly22, chantilly23, chantilly24],
   dessus: chantilly23,
@@ -94,6 +96,7 @@ const chantilly = {
 const huileEclat = {
   id: 'huile-eclat',
   nom: 'Huile Éclat',
+  prix: 6000,
   image: huileEclat13,
   images: [huileEclat14, huileEclat15, huileEclat13],
   hauteurDetail: 320,
@@ -102,6 +105,7 @@ const huileEclat = {
 const huileDouceur = {
   id: 'huile-douceur',
   nom: 'Huile Douceur',
+  prix: 5000,
   image: huileDouceur16,
   images: [huileDouceur17, huileDouceur18, huileDouceur16],
   hauteurDetail: 320,
@@ -110,9 +114,35 @@ const huileDouceur = {
 const huileRacines = {
   id: 'huile-racines',
   nom: 'Huile Racines',
+  prix: 5500,
   image: huileRacines10,
   images: [huileRacines11, huileRacines12, huileRacines10],
   hauteurDetail: 320,
+}
+
+// ── Gammes (catégorie « Complet ») ──────────────────────────────────────────────────────────────
+// L'image est une composition des produits côte à côte (voir assets/gammes). Prix provisoires : somme
+// des produits, à remplacer par le prix réel de la gamme.
+const gammeVisage = {
+  id: 'gamme-visage',
+  nom: 'Gamme Visage',
+  gamme: true,
+  contenu: [masquePurify, serumGlow, masqueGlow],
+  prix: 13500,
+  image: gammeVisagePng,
+  images: [gammeVisagePng],
+  hauteurDetail: 285,
+}
+
+const gammeCorps = {
+  id: 'gamme-corps',
+  nom: 'Gamme Corps',
+  gamme: true,
+  contenu: [gommageSugar, huileEclat, chantilly],
+  prix: 20500,
+  image: gammeCorpsPng,
+  images: [gammeCorpsPng],
+  hauteurDetail: 285,
 }
 
 export const categories = [
@@ -122,7 +152,7 @@ export const categories = [
     cote: 'gauche',
     hauteur: 137,
     bas: 7,
-    produits: [masquePurify, masqueGlow],
+    produits: [masquePurify, masqueGlow, serumGlow],
   },
   {
     id: 'corps',
@@ -141,12 +171,11 @@ export const categories = [
     produits: [huileDouceur, huileRacines],
   },
   {
-    // Nom et produits de cette 4e catégorie à confirmer
-    id: 'cheveux-2',
-    titre: 'CHEVEUX',
+    id: 'complet',
+    titre: 'COMPLET',
     cote: 'droite',
-    hauteur: 172,
-    bas: 9,
-    produits: [serumGlow],
+    hauteur: 112,
+    bas: 6,
+    produits: [gammeVisage, gammeCorps],
   },
 ]

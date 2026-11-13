@@ -300,8 +300,62 @@
   margin: 0;
 }
 
+/* Petite flèche dans un rond, en bas de la vue d'arrivée. Elle est unique (hors des panneaux) : elle
+   reste en place pendant un balayage et s'efface quand les infos sont montées. */
+.detail__carrousel {
+  position: relative;
+}
+
+.detail__indice {
+  position: absolute;
+  top: 702px;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: -16px;
+  padding: 0;
+  border: 1.5px solid rgba(67, 16, 27, 0.28);
+  border-radius: 50%;
+  background: none;
+  color: var(--bordeaux);
+  opacity: 0.75;
+  cursor: pointer;
+  transition: opacity 0.4s ease;
+}
+
+.detail__indice svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: indice-rebond 2s ease-in-out infinite;
+}
+
+.detail__indice--cache {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes indice-rebond {
+  0%, 100% { transform: translateY(-1px); }
+  50% { transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detail__indice svg {
+    animation: none;
+  }
+}
+
 .detail__prix {
-  margin: 78px 0 0;
+  margin: 74px 0 0;
   font-family: var(--font-titre);
   font-weight: 800;
   font-size: 44px;

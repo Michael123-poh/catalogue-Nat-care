@@ -1,0 +1,258 @@
+/* Fiche complète : feuille qui monte du bas de l'écran. Le contenu défile, l'en-tête et le pied
+   (prix + Acheter) restent visibles. */
+.fiche {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.fiche__voile {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 8, 14, 0.55);
+  animation: fiche-voile 0.3s ease both;
+}
+
+.fiche__feuille {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(520px, 100%);
+  max-height: 90vh;
+  max-height: 90dvh;
+  border-radius: 24px 24px 0 0;
+  background: var(--creme);
+  color: var(--bordeaux);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+  animation: fiche-monte 0.4s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.fiche__entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex: none;
+  padding: 22px 20px 14px 24px;
+  border-bottom: 1px solid rgba(67, 16, 27, 0.12);
+}
+
+.fiche__titre {
+  margin: 0;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.fiche__accroche {
+  margin: 8px 0 0;
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #7f9040;
+}
+
+.fiche__fermer {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(67, 16, 27, 0.08);
+  color: var(--bordeaux);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fiche__corps {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 24px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.fiche__texte {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.fiche__section {
+  margin-top: 22px;
+}
+
+.fiche__sous-titre {
+  margin: 0 0 8px;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+/* Bienfaits : un titre fort, puis l'explication */
+.fiche__bienfaits {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fiche__bienfaits li {
+  padding: 12px 14px;
+  border-left: 3px solid #a9b96e;
+  border-radius: 0 12px 12px 0;
+  background: rgba(169, 185, 110, 0.14);
+}
+
+.fiche__bienfaits strong {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.fiche__bienfaits span {
+  font-size: 14px;
+  line-height: 1.38;
+}
+
+.fiche__puces,
+.fiche__etapes {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.38;
+}
+
+.fiche__puces li,
+.fiche__etapes li {
+  margin-bottom: 8px;
+}
+
+.fiche__puces li::marker,
+.fiche__etapes li::marker {
+  color: #7f9040;
+  font-weight: 700;
+}
+
+.fiche__gamme {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fiche__gamme li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(169, 185, 110, 0.14);
+  font-size: 15px;
+}
+
+.fiche__gamme img {
+  flex: none;
+  width: 40px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.fiche__gamme span {
+  flex: 1;
+  font-family: var(--font-titre);
+  font-weight: 700;
+}
+
+.fiche__gamme strong {
+  font-family: var(--font-titre);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.fiche__note {
+  margin: 10px 0 0;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.38;
+}
+
+.fiche__precautions {
+  margin-top: 24px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(67, 16, 27, 0.07);
+  font-size: 13px;
+  line-height: 1.38;
+}
+
+.fiche__precautions strong {
+  font-family: var(--font-titre);
+  font-weight: 800;
+}
+
+.fiche__precautions p {
+  margin: 4px 0 0;
+}
+
+.fiche__pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: none;
+  padding: 14px 24px calc(16px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(67, 16, 27, 0.12);
+  background: var(--creme);
+}
+
+.fiche__prix {
+  margin: 0;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.fiche__acheter {
+  min-width: 150px;
+  padding: 10px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: #a9b96e;
+  color: var(--blanc);
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+@keyframes fiche-voile {
+  from { opacity: 0; }
+}
+
+@keyframes fiche-monte {
+  from { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fiche__voile,
+  .fiche__feuille {
+    animation: none;
+  }
+}

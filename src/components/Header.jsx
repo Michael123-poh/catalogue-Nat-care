@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <>
       <header className="header">
-        <Link to="/" viewTransition onClick={terminerVol} aria-label="Nat'Care — accueil">
+        <Link to="/catalogue" viewTransition onClick={terminerVol} aria-label="Nat'Care — accueil">
           <img className="header__logo" src={logo} alt="Nat'Care" />
         </Link>
         <button

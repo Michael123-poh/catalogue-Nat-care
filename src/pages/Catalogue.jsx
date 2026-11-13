@@ -12,6 +12,7 @@ export default function Catalogue() {
   useEffect(() => {
     categories
       .flatMap((c) => c.produits)
+      .filter((produit) => !produit.gamme)
       .forEach((produit) => chargerModele(produit).catch(() => {}))
   }, [])
 

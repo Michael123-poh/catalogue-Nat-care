@@ -13,6 +13,9 @@ const PAUSE_ENTRE_ETAPES = 900
 const SEUIL_GESTE = 50
 
 // Le panneau du produit affiché est toujours le dernier du carrousel (le sortant est avant lui)
+const ACCUEIL = '/catalogue'
+const estDetail = (chemin) => chemin.startsWith('/catalogue/')
+
 const PRODUIT = '.detail__carrousel > .panneau:last-child'
 
 const ETAPES = {
@@ -52,19 +55,21 @@ function choisir(c, vues) {
   const inactif = maintenant - c.activite
   const vu = (etape) => vues.includes(etape)
 
-  if (document.querySelector('.panier--ouvert')) return null
+  if (document.querySelector('.panier--ouvert, .fiche')) return null
   if (maintenant - c.fin < PAUSE_ENTRE_ETAPES) return null
 
-  if (c.pathname === '/') {
+  if (c.pathname === ACCUEIL) {
     if (!vu('categorie') && depuis > 1200) return 'categorie'
     if (c.retourAccueil && vu('monter') && !vu('commande') && depuis > 1500) return 'commande'
-  } else if (!vol.enCours && depuis > 1500) {
+  } else if (estDetail(c.pathname) && !vol.enCours && depuis > 1500) {
     const carrousel = document.querySelector('.detail__carrousel')
     if (!carrousel) return null
     const compact = Boolean(document.querySelector('.panneau--compact'))
     const nbProduits = Number(carrousel.dataset.produits)
     if (!vu('glisser') && nbProduits > 1) return 'glisser'
-    if (!vu('vues')) return 'vues'
+    // Un produit à une seule image (une gamme) n'a pas de miniatures à montrer
+    const aDesVues = Boolean(document.querySelector(`${PRODUIT} .detail__miniatures`))
+    if (!vu('vues') && aDesVues) return 'vues'
     if (!vu('monter') && !compact && inactif >= INACTIF_PRODUIT) return 'monter'
     if (
       !vu('acheter') &&
@@ -114,11 +119,17 @@ export default function Tutoriel() {
   // Changement de page : on repart de zéro pour l'inactivité, et on note un retour sur la home
   useEffect(() => {
     const c = ctx.current
-    if (c.pathname !== '/' && pathname === '/') c.retourAccueil = true
+    if (estDetail(c.pathname) && pathname === ACCUEIL) c.retourAccueil = true
     c.pathname = pathname
     c.entree = Date.now()
     c.activite = Date.now()
   }, [pathname])
+
+  // Chaque étape n'est montrée qu'une fois pour toutes sur cet appareil : on la note comme vue dès
+  // qu'elle s'affiche, même si la personne quitte la page sans la fermer
+  useEffect(() => {
+    if (etape) tutoriel.marquerVu(etape)
+  }, [etape])
 
   const valider = useCallback((fait) => {
     tutoriel.marquerVu(fait)
@@ -132,7 +143,7 @@ export default function Tutoriel() {
     const activite = () => {
       ctx.current.activite = Date.now()
     }
-    const surDetail = () => ctx.current.pathname !== '/'
+    const surDetail = () => estDetail(ctx.current.pathname)
     let depart = null
 
     const surPointeurBas = (e) => {
@@ -153,15 +164,17 @@ export default function Tutoriel() {
       if (cible.closest('.categorie')) valider('categorie')
       if (cible.closest('.detail__miniature, .detail__point')) valider('vues')
       if (cible.closest('.detail__acheter')) valider('acheter')
+      if (cible.closest('.detail__indice')) valider('monter')
       if (cible.closest('.header__menu')) valider('commande')
     }
     const surMolette = (e) => {
       activite()
+      if (document.querySelector('.fiche')) return
       if (surDetail() && e.deltaY > 0) valider('monter')
     }
     const surTouche = (e) => {
       activite()
-      if (!surDetail()) return
+      if (!surDetail() || document.querySelector('.fiche')) return
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') valider('glisser')
       if (e.key === 'ArrowDown') valider('monter')
     }

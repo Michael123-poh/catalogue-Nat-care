@@ -14,7 +14,7 @@ export default function CategoriePage() {
   const { categorieId } = useParams()
   const categorie = categories.find((c) => c.id === categorieId)
 
-  if (!categorie) return <Navigate to="/" replace />
+  if (!categorie) return <Navigate to="/catalogue" replace />
 
   return <CategorieDetail key={categorie.id} categorie={categorie} />
 }
@@ -61,13 +61,17 @@ function CategorieDetail({ categorie }) {
 
   // Clavier et molette (ordinateur)
   useEffect(() => {
+    // La fiche complète (fenêtre au-dessus de la page) a son propre défilement et ses propres touches
+    const ficheOuverte = () => Boolean(document.querySelector('.fiche'))
     const surTouche = (e) => {
+      if (ficheOuverte()) return
       if (e.key === 'ArrowRight') aller(1)
       if (e.key === 'ArrowLeft') aller(-1)
       if (e.key === 'ArrowDown') setCompact(true)
       if (e.key === 'ArrowUp') setCompact(false)
     }
     const surMolette = (e) => {
+      if (ficheOuverte()) return
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) setCompact(e.deltaY > 0)
     }
     window.addEventListener('keydown', surTouche)
@@ -126,6 +130,21 @@ function CategorieDetail({ categorie }) {
           data-produits={nbProduits}
           onPointerDown={commencerBalayage}
         >
+          {/* Une seule flèche, hors des panneaux : elle ne glisse pas avec les produits, donc ne tremble
+              pas et ne se superpose pas à celle du produit suivant (avant les panneaux dans le DOM :
+              le tutoriel cible le dernier enfant) */}
+          <button
+            type="button"
+            className={`detail__indice${compact ? ' detail__indice--cache' : ''}`}
+            onClick={() => setCompact(true)}
+            aria-label="Voir la description et le prix"
+            tabIndex={compact ? -1 : 0}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 9.5l6 6 6-6" />
+            </svg>
+          </button>
+
           {vue.sortant !== null && (
             <ProduitPanneau
               key={produits[vue.sortant].id}
