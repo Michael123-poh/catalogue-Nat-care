@@ -8,17 +8,42 @@
   overflow: hidden;
 }
 
-/* Les bords que l'affiche ne couvre pas (écran plus large que ses proportions) prolongent ses deux
-   zones : fond clair en haut, bande bordeaux à partir de 74,8 % de la hauteur (là où elle commence
-   sur l'affiche) */
+/* Les bords que l'affiche ne couvre pas (écran plus large que ses proportions) reprennent son motif :
+   deux tuiles découpées dans l'affiche (motif clair de 363 px, bande bordeaux de 189 px de période),
+   à la même échelle et alignées sur son bord gauche, donc sans coupure visible. La bande bordeaux
+   commence à 74,8 % de la hauteur (ligne 1430 sur 1912). */
 .bienvenue {
-  background: linear-gradient(#fbf6f5 0 74.8%, #470f1b 74.8% 100%);
+  --x0: calc((100vw - min(100vw, 100svh * 880 / 1912)) / 2);
+  background: #470f1b;
+}
+
+.bienvenue__fond {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-position: var(--x0) 0;
+}
+
+.bienvenue__fond--clair {
+  top: 0;
+  height: 74.79%;
+  background-image: var(--motif-clair);
+  background-size: calc(100svh * 363 / 1912) auto;
+}
+
+.bienvenue__fond--bordeaux {
+  bottom: 0;
+  height: 25.21%;
+  background-image: var(--motif-bordeaux);
+  background-repeat: repeat-x;
+  background-size: calc(100svh * 189 / 1912) 100%;
 }
 
 /* L'affiche est toujours entière, à ses proportions (880 x 1912) : le même rendu sur tous les écrans,
    seulement plus ou moins grand. Ses dimensions servent d'unité (cqh) au bouton. */
 .bienvenue__affiche {
   position: relative;
+  z-index: 1;
   container-type: size;
   width: min(100vw, calc(100svh * 880 / 1912));
   height: 100%;
